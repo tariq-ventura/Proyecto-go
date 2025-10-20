@@ -15,6 +15,7 @@ type Database interface {
 	SelectTasks(collection string) ([]tasks_domain.Task, error)
 	UpdateTasks(result tasks_domain.Task, collection string) error
 	DeleteTasks(result tasks_domain.Task, collection string) error
+	TaskMigration(ctx context.Context) error
 }
 
 func NewDatabase(ctx context.Context) (Database, error) {

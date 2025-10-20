@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/google/uuid"
 	"github.com/tariq-ventura/Proyecto-go/internal/db"
 	"github.com/tariq-ventura/Proyecto-go/internal/logs"
 	tasks_domain "github.com/tariq-ventura/Proyecto-go/internal/tasks/domain"
@@ -37,12 +36,6 @@ func (th *TaskHandler) Insert(c *gin.Context) {
 
 	for i, post := range posts {
 		go func(i int, post tasks_domain.Task) {
-			namespace := uuid.New()
-			name := []byte("tasks")
-			id := uuid.NewSHA1(namespace, name)
-
-			posts[i].ID = id.String()
-
 			response := validations.ValidateStruct(validate, post)
 			if !response {
 				errors <- fmt.Errorf("validation failed for task: %s", post.Name)

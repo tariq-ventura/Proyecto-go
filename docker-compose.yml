@@ -39,6 +39,7 @@ services:
       - MONGO_URI=${MONGO_URI}
       - DB_CONTEXT=${DB_CONTEXT}
       - DB_NAME=${DB_NAME}
+      - DB_STRING=${DB_STRING}
     restart: always
     ports:
       - 3000:3000

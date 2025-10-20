@@ -11,10 +11,6 @@ import (
 func main() {
 	ctx := context.Background()
 
-	r := &router.Routes{}
-	r.Routes = r.SetupRouter()
-	r.Run()
-
 	database, err := db.NewDatabase(ctx)
 	if err != nil {
 		logs.LogError("Database connection error", map[string]interface{}{"error": err.Error()})
@@ -26,4 +22,11 @@ func main() {
 		logs.LogError("Database migration error", map[string]interface{}{"error": err.Error()})
 		panic("app stopped")
 	}
+
+	logs.LogInfo("Database connected and migrated successfully", nil)
+
+	r := &router.Routes{}
+	r.Routes = r.SetupRouter()
+	r.Run()
+
 }

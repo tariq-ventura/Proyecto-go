@@ -16,6 +16,7 @@ func (r *Routes) SetupRouter() *gin.Engine {
 
 	router.Static("/static", "./static")
 	router.LoadHTMLGlob("templates/*")
+	router.GET("/healthz", r.Print)
 
 	r.IndexRoutes(router)
 	r.TasksRoutes(router)

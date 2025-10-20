@@ -7,6 +7,10 @@ let tasksToDelete = [];
 document.addEventListener('DOMContentLoaded', () => {
     fetchTasks();
     setupDragAndDrop();
+
+    // Establecer la fecha mínima en el campo de fecha
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('new-pending-date').setAttribute('min', today);
 });
 
 async function fetchTasks() {
@@ -53,7 +57,13 @@ function createTaskElement(task) {
     li.dataset.description = task.description;
     li.dataset.dueDate = task.dueDate;
     li.dataset.priority = task.priority;
-    li.textContent = task.name;
+
+    li.innerHTML = `
+        <strong>${task.name}</strong><br>
+        <small>Description: ${task.description}</small><br>
+        <small>Priority: ${task.priority}</small><br>
+        <small>Due Date: ${task.dueDate}</small>
+    `;
 
     const deleteButton = document.createElement('button');
     deleteButton.textContent = 'Delete';
@@ -68,23 +78,36 @@ function createTaskElement(task) {
 }
 
 function addTask(status) {
-    const input = document.getElementById(`new-pending-task`);
-    const name = input.value.trim();
-    if (name) {
+    const nameInput = document.getElementById(`new-pending-task`);
+    const descriptionInput = document.getElementById(`new-pending-description`);
+    const priorityInput = document.getElementById(`new-pending-priority`);
+    const dateInput = document.getElementById(`new-pending-date`);
+
+    const name = nameInput.value.trim();
+    const description = descriptionInput.value.trim();
+    const priority = priorityInput.value;
+    const dueDate = dateInput.value;
+
+    if (name && description && dueDate) {
         const newTask = {
-            // El ID se asignará en el backend, pero usamos uno temporal para el frontend
-            id: `new-${Date.now()}`, 
             name: name,
-            description: "Default description",
+            description: description,
             status: status,
-            dueDate: new Date().toISOString().split('T')[0],
-            priority: "Medium"
+            dueDate: dueDate,
+            priority: priority
         };
         tasksToAdd.push(newTask);
         const listId = getListIdByStatus(status);
         const list = document.getElementById(listId);
         list.appendChild(createTaskElement(newTask));
-        input.value = '';
+        
+        // Limpiar los campos después de agregar la tarea
+        nameInput.value = '';
+        descriptionInput.value = '';
+        priorityInput.value = 'Medium';
+        dateInput.value = '';
+    } else {
+        alert('Please fill in all fields before adding a task.');
     }
 }
 

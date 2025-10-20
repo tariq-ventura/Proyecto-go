@@ -14,6 +14,8 @@ import (
 type Database interface {
 	InsertTasks(result tasks_domain.Task, collection string) error
 	SelectTasks(collection string) ([]tasks_domain.Task, error)
+	SelectTasksStatus(collection, status string) ([]tasks_domain.Task, error)
+	SelectTasksDate(collection, date string) ([]tasks_domain.Task, error)
 	UpdateTasks(result tasks_domain.Task, collection string) error
 	DeleteTasks(result tasks_domain.Task, collection string) error
 	TaskMigration(ctx context.Context) error

@@ -36,6 +36,31 @@ async function fetchTasks() {
     }
 }
 
+async function fetchTasksByStatus() {
+    const statusSelect = document.getElementById('status-select');
+    const status = statusSelect.value;
+
+    try {
+        const response = await fetch(`${API_URL}/status/${status}`);
+        if (!response.ok) {
+            throw new Error(`Error fetching tasks for status "${status}": ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        const tasks = result.data || [];
+
+        if (tasks.length === 0) {
+            alert(`No tasks found for status "${status}".`);
+        } else {
+            const taskList = tasks.map(task => `- ${task.name} (Due: ${task.dueDate}, Priority: ${task.priority})`).join('\n');
+            alert(`Tasks in status "${status}":\n${taskList}`);
+        }
+    } catch (error) {
+        console.error('Error fetching tasks by status:', error);
+        alert('An error occurred while fetching tasks. Please try again.');
+    }
+}
+
 function getListIdByStatus(status) {
     switch (status) {
         case 'Pending':

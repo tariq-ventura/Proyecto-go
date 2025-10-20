@@ -28,3 +28,47 @@ func (th *TaskHandler) Select(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"data": tasks})
 }
+
+func (th *TaskHandler) SelectStatus(c *gin.Context) {
+	ctx := c.Request.Context()
+	status := c.Param("status")
+
+	database, err := db.NewDatabase(ctx)
+	if err != nil {
+		logs.LogError("Database connection error", map[string]interface{}{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal setup error"})
+		return
+	}
+
+	tasks, dberr := database.SelectTasksStatus("tasks", status)
+
+	if dberr != nil {
+		logs.LogError("Database Insert error", map[string]interface{}{"error": dberr.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal database insert error"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": tasks})
+}
+
+func (th *TaskHandler) SelectDate(c *gin.Context) {
+	ctx := c.Request.Context()
+	date := c.Param("date")
+
+	database, err := db.NewDatabase(ctx)
+	if err != nil {
+		logs.LogError("Database connection error", map[string]interface{}{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal setup error"})
+		return
+	}
+
+	tasks, dberr := database.SelectTasksDate("tasks", date)
+
+	if dberr != nil {
+		logs.LogError("Database Insert error", map[string]interface{}{"error": dberr.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal database insert error"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": tasks})
+}

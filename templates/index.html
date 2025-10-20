@@ -31,6 +31,14 @@
             <ul id="done-tasks" class="task-ul" data-status="Done"></ul>
         </div>
     </div>
+    <div class="status-checker">
+        <select id="status-select">
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Done">Done</option>
+        </select>
+        <button onclick="fetchTasksByStatus()">Check Status</button>
+    </div>
     <button id="accept-button" onclick="acceptChanges()">Accept</button>
 
     <script src="/static/js/script.js"></script>

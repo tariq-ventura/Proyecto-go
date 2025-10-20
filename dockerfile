@@ -17,6 +17,8 @@ FROM alpine:latest AS release-stage
 WORKDIR /
 
 COPY --from=bin-stage /bin/api /bin/api
+COPY --from=bin-stage /github.com/tariq-ventura/Proyecto-go/templates/ ./templates/
+COPY --from=bin-stage /github.com/tariq-ventura/Proyecto-go/static/ ./static/
 VOLUME /var/log
 
 EXPOSE 3000

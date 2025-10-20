@@ -14,7 +14,7 @@ type PostgresClient struct {
 	ctx    context.Context
 }
 
-func Connect(ctx context.Context) *gorm.DB {
+func SetupPostgres(ctx context.Context) *PostgresClient {
 	dsn := os.Getenv("DB_STRING")
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
@@ -26,5 +26,8 @@ func Connect(ctx context.Context) *gorm.DB {
 
 	logs.LogInfo("PostgreSQL connected successfully", nil)
 
-	return db
+	return &PostgresClient{
+		client: db,
+		ctx:    ctx,
+	}
 }

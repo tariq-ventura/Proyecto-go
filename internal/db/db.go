@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/tariq-ventura/Proyecto-go/internal/db/mongo"
+	"github.com/tariq-ventura/Proyecto-go/internal/db/postgres"
 	tasks_domain "github.com/tariq-ventura/Proyecto-go/internal/tasks/domain"
 )
 
@@ -24,6 +25,9 @@ func NewDatabase(ctx context.Context) (Database, error) {
 	case "mongo":
 		fmt.Print("Using mongo")
 		return mongo.SetupMongo(ctx), nil
+	case "postgres":
+		fmt.Print("Using postgres")
+		return postgres.SetupPostgres(ctx), nil
 	default:
 		return nil, errors.New("unsupported database backend")
 	}

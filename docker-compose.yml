@@ -1,19 +1,19 @@
 services:
   # PostgreSQL for production
-  # postgres:
-  #   image: postgres:14
-  #   container_name: postgres-db
-  #   ports:
-  #     - 5435:5434 
-  #   restart: always
-  #   environment:
-  #     - POSTGRES_DB=${DB_NAME} 
-  #     - POSTGRES_USER=${USER_DB} 
-  #     - POSTGRES_PASSWORD=${PASSWORD} 
-  #   networks:
-  #     - api-postgres
-  #   volumes:
-  #     - postgres_local_data:/var/lib/postgresql/data:Z 
+  postgres:
+    image: postgres:14
+    container_name: postgres-db
+    ports:
+      - 5435:5434 
+    restart: always
+    environment:
+      - POSTGRES_DB=${DB_NAME} 
+      - POSTGRES_USER=${USER_DB} 
+      - POSTGRES_PASSWORD=${PASSWORD} 
+    networks:
+      - api-postgres
+    volumes:
+      - postgres_local_data:/var/lib/postgresql/data:Z 
 
   # MongoDB
   mongo-db:

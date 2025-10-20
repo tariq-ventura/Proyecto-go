@@ -14,5 +14,6 @@ func (ro *Routes) TasksRoutes(r *gin.Engine) {
 		routes.POST("/", tr.Insert)
 		routes.GET("/", tr.Select)
 		routes.PUT("/", tr.Update)
+		routes.DELETE("/", tr.Delete)
 	}
 }

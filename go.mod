@@ -6,7 +6,6 @@ require (
 	github.com/gin-contrib/cors v1.7.6
 	github.com/gin-gonic/gin v1.11.0
 	github.com/go-playground/validator v9.31.0+incompatible
-	github.com/google/uuid v1.6.0
 	github.com/sirupsen/logrus v1.9.3
 	go.mongodb.org/mongo-driver v1.17.4
 	gorm.io/driver/postgres v1.6.0

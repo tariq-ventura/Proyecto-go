@@ -14,8 +14,10 @@ type Routes struct {
 func (r *Routes) SetupRouter() *gin.Engine {
 	router := gin.Default()
 
-	router.GET("/", r.Print)
+	router.Static("/static", "./static")
+	router.LoadHTMLGlob("templates/*")
 
+	r.IndexRoutes(router)
 	r.TasksRoutes(router)
 
 	return router

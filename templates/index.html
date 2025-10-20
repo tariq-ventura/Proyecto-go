@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Task Manager</title>
+</head>
+<body>
+    <h1>Task Manager</h1>
+    <div class="task-container">
+        <div class="task-list">
+            <h2>Pending</h2>
+            <ul id="pending-tasks" class="task-ul" data-status="Pending"></ul>
+            <input type="text" id="new-pending-task" placeholder="Add new task">
+            <button onclick="addTask('Pending')">Add</button>
+        </div>
+        <div class="task-list">
+            <h2>In Progress</h2>
+            <ul id="in-progress-tasks" class="task-ul" data-status="In Progress"></ul>
+        </div>
+        <div class="task-list">
+            <h2>Done</h2>
+            <ul id="done-tasks" class="task-ul" data-status="Done"></ul>
+        </div>
+    </div>
+    <button id="accept-button" onclick="acceptChanges()">Accept</button>
+
+    <script src="/static/js/script.js"></script>
+</body>
+</html>

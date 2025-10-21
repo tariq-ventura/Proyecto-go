@@ -14,7 +14,7 @@ type PostgresClient struct {
 	ctx    context.Context
 }
 
-func SetupPostgres(ctx context.Context) *PostgresClient {
+var SetupPostgres = func(ctx context.Context) *PostgresClient {
 	dsn := os.Getenv("DB_STRING")
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})

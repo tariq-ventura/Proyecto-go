@@ -3,6 +3,7 @@ package tasks_infra
 import (
 	"fmt"
 	"net/http"
+	"sync"
 
 	"github.com/gin-gonic/gin"
 	"github.com/tariq-ventura/Proyecto-go/internal/db"
@@ -13,7 +14,6 @@ import (
 
 func (th *TaskHandler) Update(c *gin.Context) {
 	ctx := c.Request.Context()
-
 	var posts []tasks_domain.Task
 
 	if err := c.BindJSON(&posts); err != nil {
@@ -22,10 +22,6 @@ func (th *TaskHandler) Update(c *gin.Context) {
 	}
 
 	validate := validations.StructValidator
-
-	done := make(chan string, len(posts))
-	errors := make(chan error, len(posts))
-
 	database, err := db.NewDatabase(ctx)
 	if err != nil {
 		logs.LogError("Database connection error", map[string]interface{}{"error": err.Error()})
@@ -33,33 +29,39 @@ func (th *TaskHandler) Update(c *gin.Context) {
 		return
 	}
 
+	var wg sync.WaitGroup
+	var mu sync.Mutex
+	var processingErrors []error
+
 	for _, post := range posts {
+		wg.Add(1)
 		go func(post tasks_domain.Task) {
-			response := validations.ValidateStruct(validate, post)
-			if !response {
-				errors <- fmt.Errorf("validation failed for task: %s", post.Name)
+			defer wg.Done()
+
+			if !validations.ValidateStruct(validate, post) {
+				err := fmt.Errorf("validation failed for task: %s", post.Name)
+				mu.Lock()
+				processingErrors = append(processingErrors, err)
+				mu.Unlock()
 				return
 			}
 
-			dberr := database.UpdateTasks(post, "tasks")
-			if dberr != nil {
-				errors <- fmt.Errorf("database update error for task: %s, error: %v", post.Name, dberr)
+			if dberr := database.UpdateTasks(post, "tasks"); dberr != nil {
+				err := fmt.Errorf("database update error for task: %s, error: %v", post.Name, dberr)
+				mu.Lock()
+				processingErrors = append(processingErrors, err)
+				mu.Unlock()
 				return
 			}
-
-			done <- post.Name
 		}(post)
 	}
 
-	for i := 0; i < len(posts); i++ {
-		select {
-		case err := <-errors:
-			logs.LogError("Task processing error", map[string]interface{}{"error": err.Error()})
-		case <-done:
-		}
-	}
+	wg.Wait()
 
-	if len(errors) > 0 {
+	if len(processingErrors) > 0 {
+		for _, e := range processingErrors {
+			logs.LogError("Task processing error", map[string]interface{}{"error": e.Error()})
+		}
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "One or more tasks failed to process"})
 		return
 	}

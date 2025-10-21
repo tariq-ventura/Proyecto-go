@@ -61,6 +61,61 @@ async function fetchTasksByStatus() {
     }
 }
 
+async function fetchTasksByDate() {
+    const dateInput = document.getElementById('date-input');
+    const date = dateInput.value;
+
+    if (!date) {
+        alert('Please select a date.');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_URL}/dates/${date}`);
+        if (!response.ok) {
+            throw new Error(`Error fetching tasks for date "${date}": ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        const tasks = result.data || [];
+
+        if (tasks.length === 0) {
+            alert(`No tasks found for date "${date}".`);
+        } else {
+            const taskList = tasks.map(task => `- ${task.name} (Due: ${task.dueDate}, Priority: ${task.priority})`).join('\n');
+            alert(`Tasks for date "${date}":\n${taskList}`);
+        }
+    } catch (error) {
+        console.error('Error fetching tasks by date:', error);
+        alert('An error occurred while fetching tasks. Please try again.');
+    }
+}
+
+async function fetchTasksByPriority() {
+    const prioritySelect = document.getElementById('priority-select');
+    const priority = prioritySelect.value;
+
+    try {
+        const response = await fetch(`${API_URL}/priority/${priority}`);
+        if (!response.ok) {
+            throw new Error(`Error fetching tasks for priority "${priority}": ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        const tasks = result.data || [];
+
+        if (tasks.length === 0) {
+            alert(`No tasks found for priority "${priority}".`);
+        } else {
+            const taskList = tasks.map(task => `- ${task.name} (Due: ${task.dueDate}, Status: ${task.status})`).join('\n');
+            alert(`Tasks with priority "${priority}":\n${taskList}`);
+        }
+    } catch (error) {
+        console.error('Error fetching tasks by priority:', error);
+        alert('An error occurred while fetching tasks. Please try again.');
+    }
+}
+
 function getListIdByStatus(status) {
     switch (status) {
         case 'Pending':
@@ -141,7 +196,7 @@ function deleteTask(taskId) {
     if (taskElement) {
         const task = {
             id: taskId,
-            name: taskElement.textContent.replace('Delete',''),
+            name: taskElement.querySelector('strong').textContent.trim(),
             description: taskElement.dataset.description,
             status: taskElement.parentElement.dataset.status,
             dueDate: taskElement.dataset.dueDate,
@@ -241,7 +296,7 @@ function handleDrop(e) {
         
         const updatedTask = {
             id: taskId,
-            name: taskElement.textContent.replace('Delete',''),
+            name: taskElement.querySelector('strong').textContent.trim(),
             description: taskElement.dataset.description,
             status: newStatus,
             dueDate: taskElement.dataset.dueDate,

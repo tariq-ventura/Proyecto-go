@@ -5,10 +5,10 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func (m *MongoClient) SelectTasksDate(collection, date string) ([]tasks_domain.Task, error) {
+func (m *MongoClient) SelectTasksPriority(collection, priority string) ([]tasks_domain.Task, error) {
 	var results []tasks_domain.Task
 
-	filter := bson.M{"dueDate": date}
+	filter := bson.M{"priority": priority}
 
 	cur, err := m.database.Collection(collection).Find(m.ctx, filter)
 

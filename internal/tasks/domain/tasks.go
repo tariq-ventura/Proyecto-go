@@ -5,6 +5,6 @@ type Task struct {
 	Name        string `bson:"name" json:"name" validate:"required"`
 	Description string `bson:"description" json:"description" validate:"required"`
 	Status      string `bson:"status" json:"status" validate:"required"`
-	DueDate     string `bson:"dueDate" json:"dueDate" validate:"required"`
+	DueDate     string `gorm:"column:duedate" bson:"dueDate" json:"dueDate" validate:"required"`
 	Priority    string `bson:"priority" json:"priority" validate:"required"`
 }

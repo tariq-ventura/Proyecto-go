@@ -16,12 +16,13 @@ type Database interface {
 	SelectTasks(collection string) ([]tasks_domain.Task, error)
 	SelectTasksStatus(collection, status string) ([]tasks_domain.Task, error)
 	SelectTasksDate(collection, date string) ([]tasks_domain.Task, error)
+	SelectTasksPriority(collection, priority string) ([]tasks_domain.Task, error)
 	UpdateTasks(result tasks_domain.Task, collection string) error
 	DeleteTasks(result tasks_domain.Task, collection string) error
 	TaskMigration(ctx context.Context) error
 }
 
-func NewDatabase(ctx context.Context) (Database, error) {
+var NewDatabase = func(ctx context.Context) (Database, error) {
 	dbType := os.Getenv("DB_CONTEXT")
 	switch dbType {
 	case "mongo":

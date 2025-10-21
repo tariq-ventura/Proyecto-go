@@ -15,6 +15,7 @@ func (ro *Routes) TasksRoutes(r *gin.Engine) {
 		routes.GET("/", tr.Select)
 		routes.GET("/status/:status", tr.SelectStatus)
 		routes.GET("/dates/:date", tr.SelectDate)
+		routes.GET("/priority/:priority", tr.SelectPriority)
 		routes.PUT("/", tr.Update)
 		routes.DELETE("/", tr.Delete)
 	}

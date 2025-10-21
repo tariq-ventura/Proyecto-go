@@ -7,6 +7,7 @@ type TaskInterface interface {
 	Select(c *gin.Context)
 	SelectStatus(c *gin.Context)
 	SelectDate(c *gin.Context)
+	SelectPriority(c *gin.Context)
 	Update(c *gin.Context)
 	Delete(c *gin.Context)
 }

@@ -2,6 +2,7 @@ package router
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,16 +13,21 @@ type Routes struct {
 }
 
 func (r *Routes) SetupRouter() *gin.Engine {
-	router := gin.Default()
+	r.Routes = gin.Default()
 
-	router.Static("/static", "./static")
-	router.LoadHTMLGlob("templates/*")
-	router.GET("/healthz", r.Print)
+	if _, ok := os.LookupEnv("TEST_ENV"); !ok {
+		r.Routes.LoadHTMLGlob("templates/*")
+	}
 
-	r.IndexRoutes(router)
-	r.TasksRoutes(router)
+	r.Routes.Static("/static", "./static")
+	r.Routes.GET("/healthz", r.Print)
 
-	return router
+	r.IndexRoutes(r.Routes)
+	r.TasksRoutes(r.Routes)
+
+	r.SetupCors()
+
+	return r.Routes
 }
 
 func (r *Routes) Run() {

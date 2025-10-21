@@ -16,7 +16,7 @@ type MongoClient struct {
 	database *mongo.Database
 }
 
-func SetupMongo(ctx context.Context) *MongoClient {
+var SetupMongo = func(ctx context.Context) *MongoClient {
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
 	uri := os.Getenv("MONGO_URI")
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri).SetServerAPIOptions(serverAPI))

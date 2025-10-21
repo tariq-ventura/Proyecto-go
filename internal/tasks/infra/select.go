@@ -72,3 +72,25 @@ func (th *TaskHandler) SelectDate(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"data": tasks})
 }
+
+func (th *TaskHandler) SelectPriority(c *gin.Context) {
+	ctx := c.Request.Context()
+	priority := c.Param("priority")
+
+	database, err := db.NewDatabase(ctx)
+	if err != nil {
+		logs.LogError("Database connection error", map[string]interface{}{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal setup error"})
+		return
+	}
+
+	tasks, dberr := database.SelectTasksPriority("tasks", priority)
+
+	if dberr != nil {
+		logs.LogError("Database Insert error", map[string]interface{}{"error": dberr.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal database insert error"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": tasks})
+}

@@ -39,6 +39,18 @@
         </select>
         <button onclick="fetchTasksByStatus()">Check Status</button>
     </div>
+    <div class="date-checker">
+        <input type="date" id="date-input">
+        <button onclick="fetchTasksByDate()">Check Tasks by Date</button>
+    </div>
+    <div class="priority-checker">
+        <select id="priority-select">
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+        </select>
+        <button onclick="fetchTasksByPriority()">Check Tasks by Priority</button>
+    </div>
     <button id="accept-button" onclick="acceptChanges()">Accept</button>
 
     <script src="/static/js/script.js"></script>

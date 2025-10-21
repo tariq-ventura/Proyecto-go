@@ -72,6 +72,9 @@ Una vez que los contenedores estén en funcionamiento, puedes acceder a la aplic
 
 - GET /: Sirve la aplicación frontend (index.html).
 - GET /api/tasks: Obtiene todas las tareas.
+- GET /api/tasks/status/:status: Obtiene las tareas filtradas por estado
+- GET /api/tasks/dates/:date: Obtiene las tareas filtradas por fecha de finalizacion
+- GET /api/tasks/priority/:priority: Obtiene las tareas filtradas por prioridad
 - POST /api/tasks: Crea una o más tareas nuevas.
 - PUT /api/tasks: Actualiza una o más tareas existentes.
 - DELETE /api/tasks: Elimina una o más tareas.

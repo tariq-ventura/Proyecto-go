@@ -6,7 +6,7 @@ import (
 )
 
 func (db *PostgresClient) DeleteTasks(result tasks_domain.Task, collection string) error {
-	err := db.client.Delete(&tasks_domain.Task{}, result.ID).Error
+	err := db.client.Where("id = ?", result.ID).Delete(&tasks_domain.Task{}).Error
 
 	if err != nil {
 		logs.LogError("Error deleting task in Postgres", map[string]interface{}{"error": err.Error(), "task_id": result.ID})

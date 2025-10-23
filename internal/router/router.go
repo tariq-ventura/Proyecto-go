@@ -19,14 +19,14 @@ func (r *Routes) SetupRouter() *gin.Engine {
 		r.Routes.LoadHTMLGlob("templates/*")
 	}
 
+	r.SetupCors()
+
 	r.Routes.Static("/static", "./static")
 	r.Routes.GET("/healthz", r.Print)
 
 	r.IndexRoutes(r.Routes)
 	r.TasksRoutes(r.Routes)
-
-	r.SetupCors()
-
+	
 	return r.Routes
 }
 
